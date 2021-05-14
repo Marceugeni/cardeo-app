@@ -1,24 +1,23 @@
-import image from '../assets/portadatriumph.jpg'
 import styled from 'styled-components'
 
-function Card() {
+const Card = ({ cards }) => {
 
     return(
-        <Wrapper>
-            <CardContainer>
-                <Img src={image}></Img>
-                <Title>Triumph Bonneville T100</Title>
-                <Description>Lorem ipsum, dolor sit amet consectetur adipisicing elit. 
-                    Neque molestias necessitatibus, quae perspiciatis incidunt, 
-                    voluptate amet aliquid temporibus voluptatum doloribus laudantium 
-                    provident iusto dignissimos recusandae a reiciendis ex consequatur dolorem.
-                </Description>
-                <ButtonWrapper>
-                    <Button>Edit</Button>
-                    <Button>Delete</Button>
-                </ButtonWrapper>
-            </CardContainer>
-        </Wrapper>
+        <>
+            {cards.map((card) =>(
+                <Wrapper>
+                <CardContainer>
+                    <Img src={card.imageUrl} />
+                    <Title>{card.title}</Title>
+                    <Description>{card.description}</Description>
+                    <ButtonWrapper>
+                        <Button>Edit</Button>
+                        <Button>Delete</Button>
+                    </ButtonWrapper>
+                </CardContainer>
+                </Wrapper>
+            ))}
+        </>
         
     );
     
@@ -62,6 +61,7 @@ const Button = styled.button`
     background-color: transparent;
     border-radius: 4px;
     padding: 10px;
+    cursor: pointer;
 `
 
 

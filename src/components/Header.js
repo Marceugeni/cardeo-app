@@ -1,11 +1,10 @@
-import logo from '../assets/cardeo-logo.png';
 
 import styled from 'styled-components'
 
 
-function Header() {
+const Header = () => {
    
-    
+      
     return(
         <HeaderContainer>
             <LogoWrapper>
@@ -13,7 +12,6 @@ function Header() {
                 <Logomotto>'A cards app for Tiendeo'</Logomotto>
             </LogoWrapper>
             <Button>Add Card</Button>
-            
         </HeaderContainer>
     );
  
@@ -43,6 +41,7 @@ const Button = styled.button`
     background-color: transparent;
     border-radius: 4px;
     padding: 10px;
+    cursor: pointer;
 `
 
 export default Header;
