@@ -5,7 +5,7 @@ import { useState } from 'react';
 import styled from 'styled-components'
 
 
-const Modal = ({ openModal,  }) => {
+const Modal = ({ openModal }) => {
 
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
@@ -17,15 +17,13 @@ const Modal = ({ openModal,  }) => {
         e.preventDefault()
         const newCard = { title, description, imageUrl }
 
-         fetch("https://tiendeo-frontend-cards-api.herokuapp.com/cards", {
-            method: "POST",
-            headers: { "Content-Type": "application/json",
-                       "Authorization": "Bearer b53f3e02-0dba-40c3-82c4-97e0c049f80a"},
-            title: JSON.stringify(newCard.title),
-            description: JSON.stringify(newCard.description),
-            imageUrl: JSON.stringify(newCard.imageUrl) 
+         fetch("http://localhost:8000/cards", {
+            method: 'POST',
+             headers: { "Content-Type": "application/json" },
+             body: JSON.stringify(newCard)
         }).then(() => {
             console.log('SANVIAO JA')
+            console.log(newCard)
         })
 
     }

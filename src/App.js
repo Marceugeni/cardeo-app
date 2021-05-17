@@ -1,34 +1,29 @@
 import { useEffect, useState } from 'react'
 
-import axios from 'axios'
-
-import Cards from './components/Cards'
+import CardList from './components/CardList'
 import Modal from './components/Modal'
 
 import styled from 'styled-components'
 
 
-
 function App() {
 
   const [openModal, setOpenModal] = useState(false)
-  const [cards, setCards] = useState([])
-  
+  const [cards, setCards] = useState(null)
   
   
   useEffect(() => {
-    const fetchCards = async () => {
-      const result = await axios.get('https://tiendeo-frontend-cards-api.herokuapp.com/cards', {
-        headers: {
-          "accept": "application/json",
-          "Authorization": "Bearer b53f3e02-0dba-40c3-82c4-97e0c049f80a"
-        }
-      })
-      /* console.log(result.data) */
-      setCards(result.data)
+    fetch('http://localhost:8000/cards')
+    .then(res => {
+      return res.json()
+    })
+    .then(data => {
       
-    }
-    fetchCards()
+      setCards(data)
+    })
+    .catch(err => {
+      console.log(err.message)
+    })
   }, [])
 
 
@@ -51,8 +46,7 @@ function App() {
         
           
             <CardContainer>
-              <Cards  cards={cards} 
-                      />
+              { cards && <CardList  cards={cards} /> } 
             </CardContainer>
           
         
