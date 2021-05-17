@@ -1,8 +1,37 @@
-import styled from 'styled-components'
 import ReactDom from 'react-dom'
+import { useState } from 'react';
 
-const Modal = ({ open, close }) => {
-    if (!open) return null;
+
+import styled from 'styled-components'
+
+
+const Modal = ({ openModal,  }) => {
+
+    const [title, setTitle] = useState('')
+    const [description, setDescription] = useState('')
+    const [imageUrl, setImageUrl] = useState('')
+    
+
+  
+     const handleSubmit = (e) => {
+        e.preventDefault()
+        const newCard = { title, description, imageUrl }
+
+         fetch("https://tiendeo-frontend-cards-api.herokuapp.com/cards", {
+            method: "POST",
+            headers: { "Content-Type": "application/json",
+                       "Authorization": "Bearer b53f3e02-0dba-40c3-82c4-97e0c049f80a"},
+            title: JSON.stringify(newCard.title),
+            description: JSON.stringify(newCard.description),
+            imageUrl: JSON.stringify(newCard.imageUrl) 
+        }).then(() => {
+            console.log('SANVIAO JA')
+        })
+
+    }
+
+
+    if (!openModal) return null;
 
     return ReactDom.createPortal( 
         <>
@@ -11,11 +40,26 @@ const Modal = ({ open, close }) => {
                 <ModalContainer>
                     <Title>New Card</Title>
                     <FrormWrapper>
-                        <Form action="">
-                            <Input type="text" id="title" name="title" placeholder="Title" />
-                            <Input type="text" id="description" name="description" placeholder="Description" />
-                            <Input type="text" id="image" name="image" placeholder="Image (Url)" />
-                            <Button type="submit" value="Add">Add</Button>    
+                        <Form onSubmit={handleSubmit}>
+                            <Input type="text"
+                                   placeholder="Title" 
+                                   required 
+                                   value={title}
+                                   onChange={(e) => setTitle(e.target.value)} 
+                            />
+                            <Input type="text"
+                                   placeholder="Description"
+                                   required
+                                   value={description}
+                                   onChange={(e) => setDescription(e.target.value)} 
+                            />
+                            <Input type="text"
+                                   placeholder="Image (Url)"
+                                   value={imageUrl}
+                                   onChange={(e) => setImageUrl(e.target.value)} 
+                            />
+                            <Button type="submit" value="Add">Add</Button>
+                            
                         </Form>  
                     </FrormWrapper>
                 </ModalContainer>
@@ -32,7 +76,7 @@ const Override = styled.div`
     right: 0;
     bottom: 0;
     background-color: rgba(0, 0, 0, .6);
-    zIndex: 1000;
+    z-index: 1000;
 `
     
 const ModalPosition = styled.div`
@@ -43,7 +87,7 @@ const ModalPosition = styled.div`
     background-color: #FFFFFF;
     padding: 20px 30px 10px 30px;
     font-family: 'Montserrat', sans-serif;
-    zIndex: 1000;
+    z-index: 1000;
 
 `
 

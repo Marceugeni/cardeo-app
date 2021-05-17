@@ -1,18 +1,30 @@
 import styled from 'styled-components'
 
-const Card = ({ cards }) => {
+const Cards = ({ cards, handleEdit }) => {
+
+    const handleDelete = () => {
+        fetch('https://tiendeo-frontend-cards-api.herokuapp.com/cards/' + cards.id, {
+            method: 'DELETE',
+            headers: { "Content-Type": "application/json",
+                       "Authorization": "Bearer b53f3e02-0dba-40c3-82c4-97e0c049f80a"},
+        }).then (() => {
+            console.log('he borrado la card')
+            console.log(cards)
+        })
+
+    }
 
     return(
         <>
             {cards.map((card) =>(
                 <Wrapper>
-                <CardContainer>
-                    <Img src={card.imageUrl} />
+                <CardContainer> 
+                 { (card.imageUrl === "https://tiendeo-frontend-cards-api.herokuapp.com/") ? <Img src={require("../assets/noImage.jpg").default}/> : <Img src={card.imageUrl}/> }
                     <Title>{card.title}</Title>
                     <Description>{card.description}</Description>
                     <ButtonWrapper>
+                        <Button onClick={handleDelete}>Delete</Button>
                         <Button>Edit</Button>
-                        <Button>Delete</Button>
                     </ButtonWrapper>
                 </CardContainer>
                 </Wrapper>
@@ -25,10 +37,7 @@ const Card = ({ cards }) => {
 
 const Wrapper = styled.div`
     padding: 1em;
-    
-
 `
-
 const CardContainer = styled.div`
     border: 1px solid lightgray;
     max-width: 350px;
@@ -41,12 +50,9 @@ const Img = styled.img`
     object-fit: contain;
     border-radius: 20px 20px 0px 0px;
 `
-
 const Title = styled.h1`
     font-size: 1.5em;
-    /* color: lightgray; */
-    padding-left: 20px;
-    
+    padding-left: 20px;  
 `
 const Description = styled.p`
     text-align: justify;
@@ -63,7 +69,4 @@ const Button = styled.button`
     padding: 10px;
     cursor: pointer;
 `
-
-
-
-export default Card;
+export default Cards;
