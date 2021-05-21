@@ -20,13 +20,14 @@ const Modal = ({ openModal }) => {
         const formData = new FormData()
         formData.append("title", title)
         formData.append("description", description)
-        formData.append("imageUrl", selectedFile)
+        formData.append("image", selectedFile)
 
         console.log(formData)
          
         fetch('https://tiendeo-frontend-cards-api.herokuapp.com/cards', {
             method: "POST",
-            headers: { "accept": "application/json", 
+            headers: { "accept": "application/json",
+                       "Access-Control-Allow-Origin": "https://cardeo-app-9dj9bcg2k-marceugeni.vercel.app/", 
                        "Autorization": "Bearer b53f3e02-0dba-40c3-82c4-97e0c049f80a",
                        "Content-Type": "multipart/form-data"},
             body: formData
