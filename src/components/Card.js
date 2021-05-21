@@ -1,22 +1,47 @@
+import { useState } from 'react'
+
+import EditCardModal from './EditCardModal'
+
 import styled from 'styled-components'
 
+
 const Card = ({ card }) => {
+
+    const [openEditCardModal, setOpenEditCardModal] = useState(false)
+
+
+    const handleDelete = () => {
+        fetch('https://tiendeo-frontend-cards-api.herokuapp.com/cards/' + card.id, {
+            method: "DELETE",
+            headers: {
+                "accept": "application/json",
+                "Authorization": "Bearer b53f3e02-0dba-40c3-82c4-97e0c049f80a"
+            }
+        }).then(() => {
+            window.location.reload()
+        }).catch(err => {
+            console.log(err.message)
+        })
     
-    /* console.log(card.id) */
+    }
+    
+    /* console.log(card) */
 
         return(
         <>   
             <Wrapper>
                 <CardContainer> 
-                   { (card.imageUrl === "") ? <Img src={require("../assets/noImage.jpg").default}/> : <Img src={card.imageUrl}/> }  
+                   { (card.imageUrl === "https://tiendeo-frontend-cards-api.herokuapp.com/") ? <Img src={require("../assets/noImage.jpg").default}/> : <Img src={card.imageUrl}/> }  
                     <Title>{card.title}</Title>
                     <Description>{card.description}</Description>
                     <ButtonWrapper>
-                        <Button /* onClick={handleDelete} */>Delete</Button>
-                        <Button>Edit</Button>
+                        <Button onClick={handleDelete}>Delete</Button>
+                        <Button onClick={() => {setOpenEditCardModal(true)}}>Edit</Button>
                     </ButtonWrapper>
                 </CardContainer>
             </Wrapper>
+            <EditCardModal card={card} openModal={openEditCardModal} setOpenmodal={() => setOpenEditCardModal(false)} />
+
             
         </>
         

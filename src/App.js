@@ -13,32 +13,29 @@ function App() {
   
   
   useEffect(() => {
-    fetch('http://localhost:8000/cards')
+    fetch('https://tiendeo-frontend-cards-api.herokuapp.com/cards',{
+      method: "GET",
+      headers: {"accept": "application/json",
+                "Authorization": "Bearer b53f3e02-0dba-40c3-82c4-97e0c049f80a"}
+    })
     .then(res => {
       return res.json()
     })
     .then(data => {
-      
       setCards(data)
+      console.log(data)
     })
     .catch(err => {
-      console.log(err.message)
-    })
+/*       console.log(err.message)
+ */    })
   }, [])
-
-
-/*   const handleDelete = (id) => {
-    const currentCards = cards.filter(card => card.id !== id)
-    setCards(currentCards)
-  }; */
-  
   
   return (
     
       <Container>
         <HeaderContainer>
               <LogoWrapper>
-                  <Logotype>Moteo</Logotype>
+                  <Logotype>Cardeo</Logotype>
                   <Logomotto>'A cards app for Tiendeo'</Logomotto>
               </LogoWrapper>
               <Button onClick={() => setOpenModal(true)}>Add Card</Button>
@@ -50,13 +47,12 @@ function App() {
             </CardContainer>
           
         
-        <Modal openModal={openModal} close={() => setOpenModal(false)} />
+        <Modal openModal={openModal} setOpenmodal={() => setOpenModal(false)} />
       </Container> 
    
   );
 }
 
-/* STYLES! */
 const Container = styled.div`
   font-family: 'Montserrat', sans-serif;
   display: flex;

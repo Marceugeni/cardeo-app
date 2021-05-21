@@ -1,49 +1,37 @@
 import ReactDom from 'react-dom'
-import { useState } from 'react'
-import axios from 'axios'
-
+import { useState } from 'react';
 
 import styled from 'styled-components'
 
 
-const Modal = ({ openModal }) => {
+const EditCardModal = ({ card, openModal }) => {
 
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
-    const [selectedFile, setSelectedFile] = useState()
     
-    const handleChange = (e) => {
-        setSelectedFile(e.target.files[0])
-        
-    }
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-
-        const formData = new FormData()
-        formData.append("title", title)
-        formData.append("description", description)
-        formData.append("imageUrl", selectedFile)
-
-        console.log(formData)
-         
-        fetch('https://tiendeo-frontend-cards-api.herokuapp.com/cards', {
-            method: "POST",
-            headers: { "accept": "application/json", 
-                       "Autorization": "Bearer b53f3e02-0dba-40c3-82c4-97e0c049f80a",
-                       "Content-Type": "multipart/form-data"},
-            body: formData
-        }).then((res) => res.json())
-        .then ((res) => {
-            console.log('Enviao!!', res)
-            /* window.location.reload() */
-        }).catch((error) => {
-            console.error('ERROR JODER!', error)
-        })
-    }
+    
 
     const handleClose = () => {
         window.location.reload()
+    }
+    
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        const modifiedCard = { title, description }
+         fetch('https://tiendeo-frontend-cards-api.herokuapp.com/cards/' + card.id, {
+            method: "PUT",
+            headers: { "accept": "application/json",
+                        "Authorization": "Bearer b53f3e02-0dba-40c3-82c4-97e0c049f80a",
+                        "Content-Type": "application/json" },
+            body: JSON.stringify(modifiedCard) 
+        }).then(() => {
+            console.log(modifiedCard.title)
+            console.log('samodificao Ya')
+            window.location.reload()  
+        }).catch(err => {
+            console.log(err.message)
+        })
     }
 
     if (!openModal) return null;
@@ -56,30 +44,22 @@ const Modal = ({ openModal }) => {
                     <CloseButtonWrapper>
                         <CloseButton onClick={handleClose}>X</CloseButton>
                     </CloseButtonWrapper>
-                    <Title>New Card</Title>
+                    <Title>Modify Card</Title>
                     <FrormWrapper>
                         <Form onSubmit={handleSubmit}>
                             <Input type="text"
-                                   id="title"
                                    placeholder="Title" 
                                    required 
                                    value={title}
                                    onChange={(e) => setTitle(e.target.value)} 
                             />
                             <Input type="text"
-                                   id="description"
                                    placeholder="Description"
                                    required
                                    value={description}
                                    onChange={(e) => setDescription(e.target.value)} 
                             />
-                            <Input type="file"
-                                   id="input"
-                                   placeholder="Select image"
-                                   onChange={handleChange} 
-                            />
-                            <Button type="submit" value="Add">Add</Button>
-                            
+                            <Button type="submit" value="Add">Add</Button>    
                         </Form>  
                     </FrormWrapper>
                 </ModalContainer>
@@ -167,4 +147,4 @@ const Input = styled.input`
     }
 `
  
-export default Modal;
+export default EditCardModal;
