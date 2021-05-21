@@ -1,10 +1,7 @@
 import ReactDom from 'react-dom'
 import { useState } from 'react'
-import axios from 'axios'
-
 
 import styled from 'styled-components'
-
 
 const Modal = ({ openModal }) => {
 
@@ -36,7 +33,7 @@ const Modal = ({ openModal }) => {
         }).then((res) => res.json())
         .then ((res) => {
             console.log('Enviao!!', res)
-            /* window.location.reload() */
+            window.location.reload()
         }).catch((error) => {
             console.error('ERROR JODER!', error)
         })

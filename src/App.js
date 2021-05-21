@@ -23,7 +23,6 @@ function App() {
     })
     .then(data => {
       setCards(data)
-      console.log(data)
     })
     .catch(err => {
 /*       console.log(err.message)
