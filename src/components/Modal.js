@@ -1,5 +1,5 @@
 import ReactDom from 'react-dom'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import styled from 'styled-components'
 
@@ -8,26 +8,52 @@ const Modal = ({ openModal }) => {
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
     const [selectedFile, setSelectedFile] = useState()
+    const [previewImage, setPreviewImage] = useState() 
+    const [loadedImg, setLoadedImg] = useState()   
     
     const handleChange = (e) => {
         setSelectedFile(e.target.files[0])
+        const prevImg = e.target.files[0];
+        if (prevImg) {
+            setPreviewImage(prevImg)
+        } else {
+            setPreviewImage(null)
+        }
+
         
     }
+
+    useEffect(() => {
+        if (previewImage) {
+            const reader = new FileReader()
+            reader.onloadend = () => {
+                setLoadedImg(reader.result);
+            };
+            reader.readAsDataURL(previewImage)
+        } else {
+            setLoadedImg(null);
+        }
+    }, [previewImage])
+
+    /* console.log(selectedFile) */
 
     const handleSubmit = (e) => {
         e.preventDefault()
 
         const formData = new FormData()
-        formData.append("title", title)
-        formData.append("description", description)
-        formData.append("image", selectedFile)
+        formData.append('title', title)
+        formData.append('description', description)
+        formData.append('image', selectedFile)
 
-        console.log(formData)
+        
+        console.log(selectedFile)
+        console.log(title)
+        console.log(description)
+        
          
         fetch('https://tiendeo-frontend-cards-api.herokuapp.com/cards', {
             method: "POST",
             headers: { "accept": "application/json",
-                       "Access-Control-Allow-Origin": "https://cardeo-app-9dj9bcg2k-marceugeni.vercel.app/", 
                        "Autorization": "Bearer b53f3e02-0dba-40c3-82c4-97e0c049f80a",
                        "Content-Type": "multipart/form-data"},
             body: formData
@@ -37,7 +63,7 @@ const Modal = ({ openModal }) => {
             window.location.reload()
         }).catch((error) => {
             console.error('ERROR JODER!', error)
-        })
+        }) 
     }
 
     const handleClose = () => {
@@ -58,24 +84,25 @@ const Modal = ({ openModal }) => {
                     <FrormWrapper>
                         <Form onSubmit={handleSubmit}>
                             <Input type="text"
-                                   id="title"
+                                   name="title"
                                    placeholder="Title" 
                                    required 
                                    value={title}
                                    onChange={(e) => setTitle(e.target.value)} 
                             />
                             <Input type="text"
-                                   id="description"
+                                   name="description"
                                    placeholder="Description"
                                    required
                                    value={description}
                                    onChange={(e) => setDescription(e.target.value)} 
                             />
                             <Input type="file"
-                                   id="input"
+                                   name="imageUrl"
                                    placeholder="Select image"
                                    onChange={handleChange} 
                             />
+                            <PreviewIMAGGE src={loadedImg} alt="" />
                             <Button type="submit" value="Add">Add</Button>
                             
                         </Form>  
@@ -163,6 +190,11 @@ const Input = styled.input`
     :focus {
         outline: none;
     }
+`
+const PreviewIMAGGE = styled.img`
+    height: 200px;
+    width: 200x;
+    object-fit: cover;  
 `
  
 export default Modal;
