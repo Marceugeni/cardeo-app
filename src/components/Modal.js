@@ -55,6 +55,7 @@ const Modal = ({ openModal }) => {
             method: "POST",
             headers: { "accept": "application/json",
                        "Autorization": "Bearer b53f3e02-0dba-40c3-82c4-97e0c049f80a",
+                       "Access-Control-Allow-Origin": "*",
                        "Content-Type": "multipart/form-data"},
             body: formData
         }).then((res) => res.json())
@@ -99,6 +100,7 @@ const Modal = ({ openModal }) => {
                             />
                             <Input type="file"
                                    name="imageUrl"
+                                   required
                                    placeholder="Select image"
                                    onChange={handleChange} 
                             />
